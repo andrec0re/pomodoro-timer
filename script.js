@@ -5,12 +5,14 @@ let isRunning = false;
 let isPaused = false;
 let timerInterval;
 let currentMode = "focus";
-let focusTimeDefault = 25;
+let focusTimeDefault = 20;
 let shortBreakTimeDefault = 5;
 let longBreakTimeDefault = 20;
 let currentFocusTime = focusTimeDefault;
 let currentShortBreakTime = shortBreakTimeDefault;
 let currentLongBreakTime = longBreakTimeDefault;
+let autoStartBreaks = false;
+let autoStartPomodoros = false;
 
 const minutesDisplay = document.getElementById('minutes');
 const secondsDisplay = document.getElementById('seconds');
@@ -32,6 +34,8 @@ const resetSettingsBtn = document.getElementById('reset-settings');
 const focusRangeValue = document.querySelector('.focus-range-value');
 const shortBreakRangeValue = document.querySelector('.short-break-range-value');
 const longBreakRangeValue = document.querySelector('.long-break-range-value');
+const autoStartBreaksToggle = document.getElementById('auto-start-breaks');
+const autoStartPomodorosToggle = document.getElementById('auto-start-pomodoros')
 const timerDurations = {
     focus: () => currentFocusTime,
     shortBreak: () => currentShortBreakTime,
@@ -43,13 +47,17 @@ resetBtn.addEventListener("click", resetTimer);
 focusBtn.addEventListener("click", () => setTimer(currentFocusTime, 0, "focus"));
 shortBreakBtn.addEventListener("click", () => setTimer(currentShortBreakTime, 0, "shortBreak"));
 longBreakBtn.addEventListener("click", () => setTimer(currentLongBreakTime, 0, "longBreak"));
-
 focusDuration.addEventListener("input", (event) => { focusRangeValue.textContent = event.target.value + " min" });
 shortBreakDuration.addEventListener("input", (event) => { shortBreakRangeValue.textContent = event.target.value + " min" });
 longBreakDuration.addEventListener("input", (event) => { longBreakRangeValue.textContent = event.target.value + " min" });
-
-settingsIcon.addEventListener("click", () => { modal.style.display = 'block' });
-closeBtn.addEventListener("click", () => { modal.style.display = 'none' });
+settingsIcon.addEventListener("click", () => {
+    modal.style.display = 'block';
+    resetModalToSavedState();
+});
+closeBtn.addEventListener("click", () => {
+    modal.style.display = 'none';
+    resetModalToSavedState();
+});
 saveBtn.addEventListener("click", () => {
     modal.style.display = 'none';
     saveSettings()
@@ -62,8 +70,23 @@ resetSettingsBtn.addEventListener("click", () => {
 window.addEventListener("click", (event) => {
     if (event.target === modal) {
         modal.style.display = 'none';
+        resetModalToSavedState();
     }
 });
+
+timerEndAudio.preload = 'auto';
+timerStartAudio.preload = 'auto';
+
+function resetModalToSavedState() {
+    autoStartBreaksToggle.checked = autoStartBreaks;
+    autoStartPomodorosToggle.checked = autoStartPomodoros;
+    focusDuration.value = currentFocusTime;
+    shortBreakDuration.value = currentShortBreakTime;
+    longBreakDuration.value = currentLongBreakTime;
+    focusRangeValue.textContent = currentFocusTime + " min";
+    shortBreakRangeValue.textContent = currentShortBreakTime + " min";
+    longBreakRangeValue.textContent = currentLongBreakTime + " min";
+}
 
 function saveSettings() {
     currentFocusTime = focusDuration.value;
@@ -72,6 +95,8 @@ function saveSettings() {
     if (isRunning === false && isPaused === false) {
         minutes = timerDurations[currentMode]();
     }
+    autoStartBreaks = autoStartBreaksToggle.checked;
+    autoStartPomodoros = autoStartPomodorosToggle.checked;
     updateDisplay();
 }
 
@@ -197,8 +222,14 @@ function timerEnd() {
                 } else {
                     setTimer(currentShortBreakTime, 0, "shortBreak");
                 }
+                if (autoStartBreaks) {
+                    startTimer();
+                }
             } else {
                 setTimer(currentFocusTime, 0, "focus");
+                if (autoStartPomodoros) {
+                    startTimer();
+                }
             }
         }
     }, 500);
