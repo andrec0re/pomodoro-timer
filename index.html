@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer - Stay Focused</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="page-header">
+        <h1>
+            <img src="images/tomato-icon.svg" alt="Timer Icon">
+            Pomodoro Timer
+        </h1>
+        <p>Stay focused and productive with the Pomodoro Technique</p>
+    </header>
+
+    <div class="timer-modes">
+
+        <button type="button" id="focus-btn" class="mode-btn active">Focus</button>
+        <button type="button" id="short-break-btn" class="mode-btn">Short Break</button>
+        <button type="button" id="long-break-btn" class="mode-btn">Long Break</button>
+
+    </div>
+
+    <span class="fas fa-cog fa-fw settings-icon" title="Timer settings"></span>
+
+    <div class="timer-display">
+        <span id="minutes">25</span>:<span id="seconds">00</span>
+    </div>
+    <div class="timer-controls">
+        <button id="start-pause-btn" class="control-btn">Start</button>
+        <button id="reset-btn" class="control-btn">Reset</button>
+    </div>
+
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Timer Settings</h2>
+                <span id="close-settings">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="timer-options-container">
+                    <div class="section-title">Time (minutes)</div>
+                    <button type="button" class="fa-solid fa-rotate-right" id="reset-settings"
+                        title="Reset timings to default"></button>
+                    <div class="timer-option">
+                        <div class="timer-option-header">
+                            <span class="focus-range-value">25 min</span>
+                            <label for="focus-duration">Pomodoro</label>
+                        </div>
+                        <input type="range" id="focus-duration" min="1" max="100" step="1" value="25">
+                    </div>
+                    <div class="timer-option">
+                        <div class="timer-option-header">
+                            <span class="short-break-range-value">5 min</span>
+                            <label for="short-break-duration">Short Break</label>
+                        </div>
+                        <input type="range" id="short-break-duration" min="1" max="100" step="1" value="5">
+                    </div>
+                    <div class="timer-option">
+                        <div class="timer-option-header">
+                            <span class="long-break-range-value">20 min</span>
+                            <label for="long-break-duration">Long Break</label>
+                        </div>
+                        <input type="range" id="long-break-duration" min="1" max="100" step="1" value="20">
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" id="save-settings">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer">
+        <p>&copy; 2023 Created by andrec0re | Built with ❤️ for getting things done</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
