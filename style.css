@@ -19,7 +19,7 @@ body {
     margin-top: 40px;
     margin-bottom: 40px;
     padding: 20px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.166);
     padding-bottom: 30px;
 }
 
@@ -33,6 +33,9 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-weight: 300;
     letter-spacing: 3px;
+    transform-origin: center;
+    white-space: nowrap;
+    transform: scale(clamp(0.4, 100vw / 600px, 1));
 }
 
 .page-header img {
@@ -142,20 +145,20 @@ body {
     font-size: 120px;
     font-weight: bold;
     color: #dfdfdf;
-    margin: 50px 0;
+    margin: 50px 20px;
     text-align: center;
     background-color: #121212;
     padding: 20px 40px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: fit-content;
     box-sizing: border-box;
+    white-space: nowrap;
 }
 
 .timer-controls {
     display: flex;
     gap: 20px;
-
 }
 
 .control-btn {
@@ -196,7 +199,7 @@ body {
     margin-left: calc(-50vw + 50%);
     padding: 20px 0;
     text-align: center;
-    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid rgba(255, 255, 255, 0.166);
     color: rgba(255, 255, 255, 0.8);
 }
 
@@ -209,7 +212,7 @@ body {
 
 .settings-icon {
     position: absolute;
-    top: 45px;
+    top: 42px;
     right: 0px;
     font-size: 30px;
     padding: 8px;
