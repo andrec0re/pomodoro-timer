@@ -51,7 +51,7 @@ body {
 .timer-modes {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     background: #ff6b6b;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -65,7 +65,7 @@ body {
     color: white;
     font-size: 18px;
     padding: 10px 36px;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s; 
 }
 
 #focus-btn {
