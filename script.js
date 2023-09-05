@@ -41,6 +41,13 @@ const timerDurations = {
     shortBreak: () => currentShortBreakTime,
     longBreak: () => currentLongBreakTime
 };
+const settingsObject = {
+    focusTime: currentFocusTime,
+    shortBreakTime: currentShortBreakTime,
+    longBreakTime: currentLongBreakTime,
+    autoStartBreaks: autoStartBreaks,
+    autoStartPomodoros: autoStartPomodoros
+};
 
 startPauseBtn.addEventListener("click", toogleTimer);
 resetBtn.addEventListener("click", resetTimer);
@@ -66,6 +73,8 @@ saveBtn.addEventListener("click", () => {
 resetSettingsBtn.addEventListener("click", () => {
     resetTimersToDefault();
 });
+
+loadSettings();
 
 window.addEventListener("click", (event) => {
     if (event.target === modal) {
@@ -95,11 +104,66 @@ function saveSettings() {
     if (isRunning === false && isPaused === false) {
         minutes = timerDurations[currentMode]();
     }
-    autoStartBreaks = autoStartBreaksToggle.checked;
-    autoStartPomodoros = autoStartPomodorosToggle.checked;
+    autoStartBreaks = autoStartBreaksToggle.checked; autoStartPomodoros = autoStartPomodorosToggle.checked;
     updateDisplay();
+
+    const settings = {
+        focusTime: currentFocusTime,
+        shortBreakTime: currentShortBreakTime,
+        longBreakTime: currentLongBreakTime,
+        autoStartBreaks: autoStartBreaks,
+        autoStartPomodoros: autoStartPomodoros
+    };
+    setCookie('pomodoroSettings', JSON.stringify(settings), 365);
 }
 
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const cookies = document.cookie.split(';');
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1, cookie.length);
+        }
+        if (cookie.indexOf(nameEQ) === 0) {
+            return cookie.substring(nameEQ.length, cookie.length);
+        }
+    }
+    return null;
+}
+
+function loadSettings() {
+    const savedSettings = getCookie('pomodoroSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+
+        focusDuration.value = settings.focusTime;
+        shortBreakDuration.value = settings.shortBreakTime;
+        longBreakDuration.value = settings.longBreakTime;
+        autoStartBreaksToggle.checked = settings.autoStartBreaks;
+        autoStartPomodorosToggle.checked = settings.autoStartPomodoros;
+        // Update the current variables
+        currentFocusTime = settings.focusTime;
+        currentShortBreakTime = settings.shortBreakTime;
+        currentLongBreakTime = settings.longBreakTime;
+        autoStartBreaks = settings.autoStartBreaks; autoStartPomodoros = settings.autoStartPomodoros;
+
+        minutes = currentFocusTime;
+        seconds = 0;
+        updateDisplay(); updateRangeDisplays();
+    }
+
+    document.querySelector('.timer-display').classList.add('loaded');
+}
 
 function resetTimersToDefault() {
     focusDuration.value = focusTimeDefault;
@@ -123,7 +187,7 @@ function updateActiveButton() {
     focusBtn.classList.remove('active');
     shortBreakBtn.classList.remove('active');
     longBreakBtn.classList.remove('active');
-
+    // switch timer
     if (currentMode === "focus") {
         focusBtn.classList.add('active');
     } else if (currentMode === "shortBreak") {
@@ -214,7 +278,6 @@ function timerEnd() {
             clearInterval(flashInterval);
             minutesDisplay.style.visibility = 'visible';
             secondsDisplay.style.visibility = 'visible';
-            // switch timer
             if (currentMode === "focus") {
                 focusSessions++;
                 if (focusSessions % 4 === 0) {
@@ -258,4 +321,12 @@ function updateDisplay() {
     secondsDisplay.textContent = seconds.toString().padStart(2, '0');
 }
 
-updateDisplay();
+function updateRangeDisplays() {
+    focusRangeValue.textContent = focusDuration.value + " min";
+    shortBreakRangeValue.textContent = shortBreakDuration.value + " min"; longBreakRangeValue.textContent = longBreakDuration.value + " min";
+}
+
+if (!getCookie('pomodoroSettings')) {
+    updateDisplay();
+    document.querySelector('.timer-display').classList.add('loaded');
+}

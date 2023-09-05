@@ -28,7 +28,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 15px;
-    font-size: 3em;
+    font-size: 2.3em;
     margin: 0 0 10px 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-weight: 300;
@@ -154,6 +154,12 @@ body {
     width: fit-content;
     box-sizing: border-box;
     white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.00s ease;
+}
+
+.timer-display.loaded {
+    opacity: 1;
 }
 
 .timer-controls {
